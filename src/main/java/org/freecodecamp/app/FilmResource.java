@@ -56,5 +56,15 @@ public class FilmResource {
     		   .collect(Collectors.joining("\n"));
     }
     
+    @GET
+    @Path("/update/{minLength}/{rentalRate}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String update(short minLength, Float rentalRate) {
+    	filmRepository.updateRentalRate(minLength, rentalRate);
+       return filmRepository.getFilms(minLength)
+    		   .map(f -> String.format("%s (%d min) - %f", f.getTitle(), f.getLength(), f.getRentalRate()))
+    		   .collect(Collectors.joining("\n"));
+    }
+    
     
 }
