@@ -1,6 +1,7 @@
 package org.freecodecamp.app;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.freecodecamp.app.model.Film;
 import org.freecodecamp.app.repository.FilmRepository;
@@ -31,4 +32,15 @@ public class FilmResource {
         Optional<Film> film = filmRepository.getFilm(filmId);
         return film.isPresent() ? film.get().getTitle() : "No film was found!";
     }
+    
+    @GET
+    @Path("/pagedFilms/{page}/{minLength}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String paged(long page, short minLength) {
+       return filmRepository.paged(page, minLength)
+    		   .map(f -> String.format("%s (%d min)", f.getTitle(), f.getLength()))
+    		   .collect(Collectors.joining("\n"));
+    }
+    
+    
 }
